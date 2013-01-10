@@ -59,7 +59,7 @@
 											LIMIT 0,".$maxusers.";"); 
 
 			// initiate output string
-			$newestusers = "<table> <thead><tr><th class='column1'>".qa_lang_html('qa_new_users_lang/user_since')."</th> <th class='column2'>".qa_lang_html('qa_new_users_lang/user_name')."</th> </tr></thead>";
+			$newestusers = "<table> <thead><tr><th class='column1'>".qa_lang_html('qa_new_users_lang/user_since')."</th> <th class='column2'>".qa_lang_html('qa_new_users_lang/user_name')."</th> <th class='column3'>".qa_lang_html('users/website')."</th> </tr></thead>";
 			$d = 0;
 			while ( ($userrow = qa_db_read_one_assoc($queryRecentUsers,true)) !== null ) {
 				// do not list blocked users
@@ -68,8 +68,15 @@
 					if(!empty($userrow['avatarblobid'])) {
 						$avatar = "<img src='?qa=image&qa_blobid=". $userrow['avatarblobid'] . "&qa_size=30' />";			
 					}
+					// query userprofile
+					$queryUserWebsite = mysql_fetch_array( qa_db_query_sub('SELECT content
+											FROM `^userprofile`
+											WHERE `userid`=$
+											AND title="website"
+											LIMIT 1;', $userrow['userid']) ); 
+					$userwebsite = (isset($queryUserWebsite[0]) && trim($queryUserWebsite[0])!='') ? $queryUserWebsite[0] : '-';
 					// substr removes seconds
-					$newestusers .= "<tr><td>".substr($userrow['created'],0,16)."</td> <td>". qa_get_user_avatar_html($userrow['flags'], $userrow['email'], $userrow['handle'], $userrow['avatarblobid'], $userrow['avatarwidth'], $userrow['avatarheight'], qa_opt('avatar_users_size'), false) . " " . qa_get_one_user_html($userrow['handle'], false) . "</tr>";
+					$newestusers .= "<tr><td>".substr($userrow['created'],0,16)."</td> <td>". qa_get_user_avatar_html($userrow['flags'], $userrow['email'], $userrow['handle'], $userrow['avatarblobid'], $userrow['avatarwidth'], $userrow['avatarheight'], qa_opt('avatar_users_size'), false) . " " . qa_get_one_user_html($userrow['handle'], false) . " <td>".$userwebsite."</td> </tr>";
 				}
 			}
 			$newestusers .= "</table>";
