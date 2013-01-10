@@ -38,12 +38,19 @@
 		
 			/* SETTINGS */
 			$lastdays = 14; 			// show new users from last x days
-			$maxusers = 30;				// max new users to display
+			$maxusers = 100;			// max new users to display
 			$creditDeveloper = true;	// leave true if you like this plugin, it sets one hidden link to my q2a-forum from the new-user-page only
 			
 			/* start */
 			$qa_content=qa_content_prepare();
 
+			// return if not admin!
+			/*$level=qa_get_logged_in_level();
+			if ($level < QA_USER_LEVEL_ADMIN) {
+				$qa_content['custom0']='<div>Zugriff nicht erlaubt</div>';
+				return $qa_content;
+			}*/
+			
 			// add sub navigation
 			// $qa_content['navigation']['sub']=qa_users_sub_navigation();
 			$qa_content['title'] = qa_lang_html('qa_new_users_lang/page_title'); // page title
