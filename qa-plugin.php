@@ -4,7 +4,7 @@
 	Plugin URI: https://github.com/echteinfachtv/q2a-newest-users-page
 	Plugin Description: Displays the newest users of the last x days on a separate page
 	Plugin Version: 0.3
-	Plugin Date: 2013-01-10
+	Plugin Date: 2013-01-25
 	Plugin Author: echteinfachtv
 	Plugin Author URI: http://www.echteinfach.tv/
 	Plugin License: GPLv3

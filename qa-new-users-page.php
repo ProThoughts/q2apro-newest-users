@@ -66,11 +66,11 @@
 
 			// initiate output string
 			$newestusers = "<table> <thead><tr>
-								<th class='column1'>".qa_lang_html('qa_new_users_lang/user_since')."</th> 
-								<th class='column2'>".qa_lang_html('qa_new_users_lang/user_name')."</th> 
-								<th class='column3'>".qa_lang_html('users/website')."</th> 
-								<th class='column4'>".qa_lang_html('qa_new_users_lang/user_email')."</th> 
-								<th class='column5'>".qa_lang_html('qa_new_users_lang/user_email_confirmed')."</th> 
+								<th>".qa_lang_html('qa_new_users_lang/user_since')."</th> 
+								<th>".qa_lang_html('qa_new_users_lang/user_name')."</th> 
+								<th>".qa_lang_html('users/website')."</th> 
+								<th>".qa_lang_html('qa_new_users_lang/user_email')."</th> 
+								<th>".qa_lang_html('qa_new_users_lang/user_email_confirmed')."</th> 
 							</tr></thead>";
 			$d = 0;
 			while ( ($userrow = qa_db_read_one_assoc($queryRecentUsers,true)) !== null ) {
