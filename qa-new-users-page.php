@@ -45,11 +45,11 @@
 			$qa_content=qa_content_prepare();
 
 			// return if not admin!
-			/*$level=qa_get_logged_in_level();
+			$level=qa_get_logged_in_level();
 			if ($level < QA_USER_LEVEL_ADMIN) {
-				$qa_content['custom0']='<div>Zugriff nicht erlaubt</div>';
+				$qa_content['custom0']='<div>Access forbidden</div>';
 				return $qa_content;
-			}*/
+			}
 			
 			// add sub navigation
 			// $qa_content['navigation']['sub']=qa_users_sub_navigation();
@@ -76,11 +76,11 @@
 						$avatar = "<img src='?qa=image&qa_blobid=". $userrow['avatarblobid'] . "&qa_size=30' />";			
 					}
 					// query userprofile
-					$queryUserWebsite = mysql_fetch_array( qa_db_query_sub('SELECT content
+					$queryUserWebsite = qa_db_read_one_value( qa_db_query_sub('SELECT content
 											FROM `^userprofile`
 											WHERE `userid`=$
 											AND title="website"
-											LIMIT 1;', $userrow['userid']) ); 
+											LIMIT 1;', $userrow['userid']), true ); 
 					$userwebsite = (isset($queryUserWebsite[0]) && trim($queryUserWebsite[0])!='') ? $queryUserWebsite[0] : '-';
 					// substr removes seconds
 					$newestusers .= "<tr><td>".substr($userrow['created'],0,16)."</td> <td>". qa_get_user_avatar_html($userrow['flags'], $userrow['email'], $userrow['handle'], $userrow['avatarblobid'], $userrow['avatarwidth'], $userrow['avatarheight'], qa_opt('avatar_users_size'), false) . " " . qa_get_one_user_html($userrow['handle'], false) . " <td>".$userwebsite."</td> </tr>";
