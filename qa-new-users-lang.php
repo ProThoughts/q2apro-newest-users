@@ -30,7 +30,11 @@
 		'page_title' => 'Neueste Mitglieder der letzten Tage', // newest users of last days
 		'page_days' => 'Tage', // days
 		'user_since' => 'Mitglied seit', // user since
+		'user_email' => 'E-Mail', // user mail
+		'user_email_confirmed' => 'bestätigt', // user mail confirmed
+		'user_email_notconfirmed' => 'nein', // user mail not yet confirmed
 		'user_name' => 'Mitgliedsname', // username
+		'access_forbidden' => 'Zugriff nicht erlaubt', // Access forbidden
 		// subnavigation on page users
 		'subnav_title' => 'Neueste Mitglieder', // newest users
 	);

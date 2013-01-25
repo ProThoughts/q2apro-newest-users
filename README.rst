@@ -1,5 +1,5 @@
 ====================================
-Question2Answer Newest Users v0.2
+Question2Answer Newest Users v0.3
 ====================================
 -----------
 Description
@@ -10,7 +10,7 @@ This is a plugin for **Question2Answer** that displays the newest users of the l
 Features
 --------
 - provides a page for showing newest users of last x days, access-URL ``your-q2a-installation.com/newusers``
-- page lists user registration, username, user's website (helps to find spam)
+- page lists user registration, username, user's website (helps to find spam), email, and email confirmed
 - page can be blocked from public, see qa-new-users-page.php and uncomment after '// return if not admin'
 
 ------------

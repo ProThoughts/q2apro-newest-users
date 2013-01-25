@@ -47,34 +47,39 @@
 			// return if not admin!
 			$level=qa_get_logged_in_level();
 			if ($level < QA_USER_LEVEL_ADMIN) {
-				$qa_content['custom0']='<div>Access forbidden</div>';
+				$qa_content['custom0']='<div>'.qa_lang_html('qa_new_users_lang/access_forbidden').'</div>';
 				return $qa_content;
 			}
 			
 			// add sub navigation
 			// $qa_content['navigation']['sub']=qa_users_sub_navigation();
-			$qa_content['title'] = qa_lang_html('qa_new_users_lang/page_title'); // page title
+			$qa_content['title'] = $maxusers . ' ' . qa_lang_html('qa_new_users_lang/page_title'); // page title
 
 			// counter for custom html output
 			$c = 2;
 			
-			// query users
+			// query last 100 users
 			$queryRecentUsers = qa_db_query_sub("SELECT userid,created,handle,avatarblobid,avatarwidth,avatarheight,email,flags
 											FROM `^users`
-											WHERE created > NOW() - INTERVAL ".$lastdays." DAY
 											ORDER BY created DESC
-											LIMIT 0,".$maxusers.";"); 
+											LIMIT 0,#;", $maxusers); 
 
 			// initiate output string
-			$newestusers = "<table> <thead><tr><th class='column1'>".qa_lang_html('qa_new_users_lang/user_since')."</th> <th class='column2'>".qa_lang_html('qa_new_users_lang/user_name')."</th> <th class='column3'>".qa_lang_html('users/website')."</th> </tr></thead>";
+			$newestusers = "<table> <thead><tr>
+								<th class='column1'>".qa_lang_html('qa_new_users_lang/user_since')."</th> 
+								<th class='column2'>".qa_lang_html('qa_new_users_lang/user_name')."</th> 
+								<th class='column3'>".qa_lang_html('users/website')."</th> 
+								<th class='column4'>".qa_lang_html('qa_new_users_lang/user_email')."</th> 
+								<th class='column5'>".qa_lang_html('qa_new_users_lang/user_email_confirmed')."</th> 
+							</tr></thead>";
 			$d = 0;
 			while ( ($userrow = qa_db_read_one_assoc($queryRecentUsers,true)) !== null ) {
 				// do not list blocked users
-				if (! (QA_USER_FLAGS_USER_BLOCKED & $userrow['flags'])) {
-					$avatar = "-";
-					if(!empty($userrow['avatarblobid'])) {
-						$avatar = "<img src='?qa=image&qa_blobid=". $userrow['avatarblobid'] . "&qa_size=30' />";			
-					}
+				// if (! (QA_USER_FLAGS_USER_BLOCKED & $userrow['flags'])) {
+					//$avatar = "-";
+					//if(!empty($userrow['avatarblobid'])) {
+					//	$avatar = "<img src='?qa=image&qa_blobid=". $userrow['avatarblobid'] . "&qa_size=30' />";			
+					//}
 					// query userprofile
 					$queryUserWebsite = qa_db_read_one_value( qa_db_query_sub('SELECT content
 											FROM `^userprofile`
@@ -82,9 +87,17 @@
 											AND title="website"
 											LIMIT 1;', $userrow['userid']), true ); 
 					$userwebsite = (isset($queryUserWebsite[0]) && trim($queryUserWebsite[0])!='') ? $queryUserWebsite[0] : '-';
+					
+					$emailConfirmed = ( QA_USER_FLAGS_EMAIL_CONFIRMED && $userrow['flags'] ) ? "x" : qa_lang_html('qa_new_users_lang/user_email_notconfirmed');
 					// substr removes seconds
-					$newestusers .= "<tr><td>".substr($userrow['created'],0,16)."</td> <td>". qa_get_user_avatar_html($userrow['flags'], $userrow['email'], $userrow['handle'], $userrow['avatarblobid'], $userrow['avatarwidth'], $userrow['avatarheight'], qa_opt('avatar_users_size'), false) . " " . qa_get_one_user_html($userrow['handle'], false) . " <td>".$userwebsite."</td> </tr>";
-				}
+					$newestusers .= "<tr>
+						<td>".substr($userrow['created'],0,16)."</td> 
+						<td>". qa_get_user_avatar_html($userrow['flags'], $userrow['email'], $userrow['handle'], $userrow['avatarblobid'], $userrow['avatarwidth'], $userrow['avatarheight'], qa_opt('avatar_users_size'), false) . " " . qa_get_one_user_html($userrow['handle'], false) . " </td> 
+						<td>".$userwebsite."</td> 
+						<td>".$userrow['email']."</td> 
+						<td>".$emailConfirmed."</td> 
+						</tr>";
+				//}
 			}
 			$newestusers .= "</table>";
 
@@ -97,7 +110,7 @@
 			$qa_content['custom'.++$c]='</div>';
 			
 			// make newest users list bigger on page
-			$qa_content['custom'.++$c] = '<style type="text/css">table thead tr th,table tfoot tr th{background-color:#cfc;border:1px solid #CCC;padding:4px} table{background-color:#EEE;margin:30px 0 15px;text-align:left;border-collapse:collapse} td{border:1px solid #CCC;padding:1px 10px;line-height:25px}tr:hover{background:#ffc} .column1, .column2 {text-align:center; } td img{border:1px solid #DDD !important; margin-right:5px;} </style>';
+			$qa_content['custom'.++$c] = '<style type="text/css">table thead tr th,table tfoot tr th{background-color:#cfc;border:1px solid #CCC;padding:4px} table{background-color:#EEE;margin:30px 0 15px;text-align:left;border-collapse:collapse} td{border:1px solid #CCC;padding:1px 10px;line-height:25px}tr:hover{background:#ffc} th {text-align:center; } td img{border:1px solid #DDD !important; margin-right:5px;} </style>';
 			
 			// as I said, this is one chance to say thank you
 			if($creditDeveloper) {
