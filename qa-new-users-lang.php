@@ -33,6 +33,10 @@
 		'user_email' => 'E-Mail', // user mail
 		'user_email_confirmed' => 'bestätigt', // user mail confirmed
 		'user_email_notconfirmed' => 'nein', // user mail not yet confirmed
+		'points_abbr' => 'P', // points
+		'questions_abbr' => 'Q', // abbreviation questions
+		'answers_abbr' => 'A', // abbreviation questions
+		'comments_abbr' => 'C', // abbreviation comments
 		'user_name' => 'Mitgliedsname', // username
 		'access_forbidden' => 'Zugriff nicht erlaubt', // Access forbidden
 		// subnavigation on page users

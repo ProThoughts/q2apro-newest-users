@@ -71,6 +71,10 @@
 								<th>".qa_lang_html('users/website')."</th> 
 								<th>".qa_lang_html('qa_new_users_lang/user_email')."</th> 
 								<th>".qa_lang_html('qa_new_users_lang/user_email_confirmed')."</th> 
+								<th>".qa_lang_html('qa_new_users_lang/points_abbr')."</th> 
+								<th>".qa_lang_html('qa_new_users_lang/questions_abbr')."</th> 
+								<th>".qa_lang_html('qa_new_users_lang/answers_abbr')."</th> 
+								<th>".qa_lang_html('qa_new_users_lang/comments_abbr')."</th> 
 							</tr></thead>";
 			$d = 0;
 			while ( ($userrow = qa_db_read_one_assoc($queryRecentUsers,true)) !== null ) {
@@ -81,14 +85,21 @@
 					//	$avatar = "<img src='?qa=image&qa_blobid=". $userrow['avatarblobid'] . "&qa_size=30' />";			
 					//}
 					// query userprofile
-					$queryUserWebsite = qa_db_read_one_value( qa_db_query_sub('SELECT content
+					$queryUserWebsite = qa_db_read_one_assoc( qa_db_query_sub('SELECT content
 											FROM `^userprofile`
 											WHERE `userid`=$
 											AND title="website"
 											LIMIT 1;', $userrow['userid']), true ); 
-					$userwebsite = (isset($queryUserWebsite[0]) && trim($queryUserWebsite[0])!='') ? $queryUserWebsite[0] : '-';
+					$userwebsite = (isset($queryUserWebsite['content']) && trim($queryUserWebsite['content'])!='') ? $queryUserWebsite['content'] : '-';
 					
 					$emailConfirmed = ( QA_USER_FLAGS_EMAIL_CONFIRMED && $userrow['flags'] ) ? "x" : qa_lang_html('qa_new_users_lang/user_email_notconfirmed');
+					
+					// query userpoints and Q,A,C
+					$queryUserPQAC = qa_db_read_one_assoc( qa_db_query_sub('SELECT points, qposts, aposts, cposts
+											FROM `^userpoints`
+											WHERE `userid`=$
+											LIMIT 1;', $userrow['userid']), true ); 
+
 					// substr removes seconds
 					$newestusers .= "<tr>
 						<td>".substr($userrow['created'],0,16)."</td> 
@@ -96,6 +107,10 @@
 						<td>".$userwebsite."</td> 
 						<td>".$userrow['email']."</td> 
 						<td>".$emailConfirmed."</td> 
+						<td>".$queryUserPQAC['points']."</td> 
+						<td>".$queryUserPQAC['qposts']."</td> 
+						<td>".$queryUserPQAC['aposts']."</td> 
+						<td>".$queryUserPQAC['cposts']."</td> 
 						</tr>";
 				//}
 			}
@@ -110,7 +125,16 @@
 			$qa_content['custom'.++$c]='</div>';
 			
 			// make newest users list bigger on page
-			$qa_content['custom'.++$c] = '<style type="text/css">table thead tr th,table tfoot tr th{background-color:#cfc;border:1px solid #CCC;padding:4px} table{background-color:#EEE;margin:30px 0 15px;text-align:left;border-collapse:collapse} td{border:1px solid #CCC;padding:1px 10px;line-height:25px}tr:hover{background:#ffc} th {text-align:center; } td img{border:1px solid #DDD !important; margin-right:5px;} </style>';
+			$qa_content['custom'.++$c] = '<style type="text/css">
+			table thead tr th,table tfoot tr th{background-color:#cfc;border:1px solid #CCC;padding:4px} 
+			table{background-color:#EEE;margin:30px 0 15px;text-align:left;border-collapse:collapse} 
+			td{border:1px solid #CCC;padding:1px 10px;line-height:25px}
+			tr:hover{background:#ffc} th {text-align:center; } 
+			td img{border:1px solid #DDD !important; margin-right:5px;} 
+			table>tbody>tr>td:nth-child(7){background:#DFD;}
+			table>tbody>tr>td:nth-child(8){background:#DDF;}
+			table>tbody>tr>td:nth-child(9){background:#DDD;}
+			</style>';
 			
 			// as I said, this is one chance to say thank you
 			if($creditDeveloper) {
