@@ -14,11 +14,6 @@ Features
 - page can be blocked from public, see qa-new-users-page.php and uncomment after '// return if not admin'
 
 ------------
-Example
-------------
-This plugin is used at www.gute-mathe-fragen.de/newusers (q2a-forum for mathematics).
-
-------------
 Installation
 ------------
 #. Install Question2Answer_
